@@ -135,6 +135,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--rss", help="path to a local RSS file instead of fetching")
     parser.add_argument("--out", type=Path, default=OUT_PATH, help="output JSON path")
+    parser.add_argument(
+        "--allow-shrink",
+        action="store_true",
+        help="accept a feed with fewer episodes than the current file (see below)",
+    )
     args = parser.parse_args()
 
     if args.rss:
@@ -159,6 +164,19 @@ def main() -> int:
             for key in ("episodes", "show", "author", "description", "artwork")
         ):
             print(f"unchanged: {data['count']} episodes, nothing to write")
+            return 0
+
+        # The host has been observed serving a briefly incomplete feed, which
+        # would otherwise silently drop episodes from the archive. Losing
+        # episodes is rare and deliberate; a short read is neither, so make the
+        # shrinking case opt-in rather than letting the daily job apply it.
+        was = len(previous.get("episodes", [])) if previous else 0
+        if previous is not None and data["count"] < was and not args.allow_shrink:
+            print(
+                f"refusing to shrink the archive: feed returned {data['count']} episodes "
+                f"but {args.out.name} has {was}. This is usually a short read from the "
+                f"podcast host. Re-run with --allow-shrink if episodes were really removed."
+            )
             return 0
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
