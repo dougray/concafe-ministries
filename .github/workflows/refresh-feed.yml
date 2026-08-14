@@ -1,0 +1,46 @@
+name: Refresh podcast feed
+
+# Rebuilds docs/data/episodes.json from the show's RSS feed so new episodes
+# appear on the site without anyone touching the repo.
+
+on:
+  schedule:
+    # 11:00 UTC daily — a few hours after a typical overnight US-Central upload.
+    - cron: "0 11 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/build_feed.py"
+      - ".github/workflows/refresh-feed.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-feed
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Rebuild episodes.json from RSS
+        # build_feed.py is standard library only, so the runner's stock Python
+        # is enough and there is nothing to install.
+        run: python3 scripts/build_feed.py
+
+      - name: Commit if the feed changed
+        run: |
+          if git diff --quiet -- docs/data/episodes.json; then
+            echo "No new episodes — nothing to commit."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          COUNT=$(python3 -c "import json;print(json.load(open('docs/data/episodes.json'))['count'])")
+          git add docs/data/episodes.json
+          git commit -m "Refresh episode feed (${COUNT} episodes)"
+          git push
