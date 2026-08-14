@@ -51,6 +51,21 @@ To build from a saved copy of the feed instead of the network:
 python3 scripts/build_feed.py --rss saved-feed.xml
 ```
 
+The script only rewrites `episodes.json` when the episode data actually
+differs, so running it twice in a row produces no second change.
+
+### If the archive ever shrinks
+
+The podcast host occasionally serves a briefly incomplete feed — this happened
+once during a real CI run. The build script refuses to write a file with fewer
+episodes than the one already committed, so a short read cannot quietly delete
+episodes from the archive. If episodes really were removed from the show,
+accept the smaller feed with:
+
+```bash
+python3 scripts/build_feed.py --allow-shrink
+```
+
 ## Working on the site locally
 
 ```bash
@@ -88,14 +103,3 @@ under the [MIT License](LICENSE).
 Podcast audio, episode text, and the cover artwork are © Pastor Eradio Valverde
 and are **not** covered by that license. They are displayed here by permission of
 the ministry.
-
-### If the archive ever shrinks
-
-The podcast host occasionally serves a briefly incomplete feed. The build
-script refuses to write a file with fewer episodes than the one already
-committed, so a short read cannot quietly delete episodes from the archive.
-If episodes really were removed from the show, accept the smaller feed with:
-
-```bash
-python3 scripts/build_feed.py --allow-shrink
-```
