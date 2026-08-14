@@ -144,6 +144,23 @@ def main() -> int:
 
     data = build(rss_bytes)
 
+    # Leave the file alone when nothing about the show has actually changed.
+    # `generated` moves on every run, so without this the daily CI job would
+    # commit a new timestamp every day and bury real episode additions in
+    # noise. Skipping the write also makes `generated` mean what it says: the
+    # last time the episode list itself changed.
+    if args.out.exists():
+        try:
+            previous = json.loads(args.out.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            previous = None
+        if previous is not None and all(
+            previous.get(key) == data[key]
+            for key in ("episodes", "show", "author", "description", "artwork")
+        ):
+            print(f"unchanged: {data['count']} episodes, nothing to write")
+            return 0
+
     args.out.parent.mkdir(parents=True, exist_ok=True)
     # separators trim the whitespace JSON would otherwise add to every row.
     args.out.write_text(

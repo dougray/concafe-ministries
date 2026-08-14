@@ -145,7 +145,7 @@
 
     el.statCount.textContent = state.all.length.toLocaleString();
     if (data.generated) {
-      el.updated.textContent = "Episode list last refreshed " + fmtDate(data.generated) + ".";
+      el.updated.textContent = "Episode list last updated " + fmtDate(data.generated) + ".";
     }
 
     renderFeatured(state.all[0]);
