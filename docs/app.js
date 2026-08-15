@@ -306,7 +306,7 @@
         title: ep.title,
         artist: "Pastor Eradio Valverde",
         album: "ConCafe con Eradio Valverde",
-        artwork: [{ src: "assets/cover.jpg", sizes: "512x512", type: "image/jpeg" }]
+        artwork: [{ src: "assets/icon.png", sizes: "320x320", type: "image/png" }]
       });
     }
   }

@@ -18,10 +18,29 @@ typed by hand.
 ```
 scripts/build_feed.py     fetches the RSS feed → docs/data/episodes.json
 docs/index.html           the page
-docs/styles.css           palette taken from the show's cover art
+docs/styles.css           palette sampled from the ConCafé logo
 docs/app.js               search, filtering, and the sticky audio player
 .github/workflows/        a daily job that re-runs the build script
 ```
+
+## Brand assets
+
+`docs/assets/logo-original.png` is the logo exactly as supplied — keep it as the
+master and re-derive from it rather than editing the smaller copies.
+
+| File | Used for | Notes |
+| --- | --- | --- |
+| `logo-original.png` | archive only, not loaded by the page | 1200×800 |
+| `logo.jpg` | hero lockup, `og:image` | JPEG because the artwork is gradient-rich; PNG was 843 KB against 158 KB here |
+| `icon.png` | favicon, header mark, player art | the cup-and-cross cropped square out of the logo |
+
+The logo ships on an opaque white field, so the hero sets it on its own white
+plate instead of letting a white rectangle punch through the page in dark mode.
+
+The stylesheet's palette is sampled from the logo: espresso `#3b1f0c` and gold
+`#cd9036`. Gold on white only reaches about 2.8:1, so `--gold` is reserved for
+fills and rules while `--accent` holds a darkened gold for anything read as
+text; gold buttons carry dark ink rather than white.
 
 `docs/data/episodes.json` stores each episode as a fixed-order array rather than
 an object — at 1,400+ episodes, repeating the JSON keys costs more than the data
