@@ -404,6 +404,7 @@ mark { background: color-mix(in srgb, var(--crimson) 24%, transparent); color: i
 .footer-links a { font-size: .88rem; color: var(--ink-2); text-decoration: none; font-weight: 500; }
 .footer-links a:hover { color: var(--crimson); text-decoration: underline; }
 .footer .fine { font-size: .82rem; color: var(--ink-3); max-width: 68ch; line-height: 1.6; }
+.footer .credit { color: var(--ink-2); font-weight: 600; }
 
 /* ── sticky player ───────────────────────────────────────── */
 
