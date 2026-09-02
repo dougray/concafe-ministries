@@ -419,6 +419,7 @@ mark { background: color-mix(in srgb, var(--gold) 24%, transparent); color: inhe
 .footer-links a:hover { color: var(--accent); text-decoration: underline; }
 .footer .fine { font-size: .82rem; color: var(--ink-3); max-width: 68ch; line-height: 1.6; }
 .footer .credit { color: var(--ink-2); font-weight: 600; }
+.footer .credit a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 
 /* ── sticky player ───────────────────────────────────────── */
 
