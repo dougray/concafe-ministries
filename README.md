@@ -8,7 +8,7 @@ The site is a single static page with the show's complete archive: every
 episode is searchable and playable in the browser, with no account, no tracking,
 and no ads.
 
-**Live site:** https://dougray.github.io/concafe-ministries/
+**Live site:** https://concafe.tv/
 
 ## How it works
 
